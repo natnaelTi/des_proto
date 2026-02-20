@@ -20,18 +20,18 @@ export function SummaryPage() {
   const totalCorrect = state.history.filter((h) => h.isCorrect).length;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 px-4 sm:px-6">
       <div className="max-w-md w-full text-center">
-        <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
           Workout Complete
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-sm sm:text-base text-gray-500 mb-8">
           You answered {totalCorrect} of {progress.total} correctly.
         </p>
 
         {items.length > 0 && (
-          <div className="bg-white rounded-xl border border-gray-100 p-5 mb-8 text-left">
-            <h3 className="text-base font-semibold text-gray-800 mb-3">
+          <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 mb-8 text-left">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-800 mb-3">
               Skill Growth
             </h3>
             <ul className="space-y-2">
@@ -54,7 +54,7 @@ export function SummaryPage() {
             hover:bg-gray-700 transition-colors cursor-pointer
             focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
         >
-          Restart
+          Restart Workout
         </button>
       </div>
     </div>

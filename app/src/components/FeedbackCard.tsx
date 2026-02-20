@@ -21,13 +21,13 @@ export function FeedbackCard({
 
   return (
     <div
-      className={`mt-6 rounded-xl border p-5 ${
+      className={`mt-4 sm:mt-6 rounded-xl border p-4 sm:p-5 ${
         isCorrect
           ? 'border-emerald-200 bg-emerald-50/50'
           : 'border-gray-200 bg-gray-50/50'
       }`}
     >
-      <p className="text-lg font-semibold text-gray-800 mb-1">
+      <p className="text-base sm:text-lg font-semibold text-gray-800 mb-1">
         {isCorrect ? 'Correct.' : 'Not quite.'}
       </p>
 
@@ -37,23 +37,25 @@ export function FeedbackCard({
 
       {!isCorrect && (
         <>
-          <p className="text-sm text-gray-600 mb-2">{strategy}</p>
+          <p className="text-sm text-gray-600 mb-3">{strategy}</p>
           {question.visual && (
-            <button
-              type="button"
-              onClick={() => setShowWhy(!showWhy)}
-              className="text-sm text-gray-500 underline underline-offset-2 mb-2 cursor-pointer"
-            >
-              {showWhy ? 'Hide' : 'See why'}
-            </button>
+            <div className="mb-3">
+              <button
+                type="button"
+                onClick={() => setShowWhy(!showWhy)}
+                className="text-sm text-gray-500 underline underline-offset-2 cursor-pointer"
+              >
+                {showWhy ? 'Hide' : 'See Why'}
+              </button>
+              {showWhy && <MinimalNumberLine />}
+            </div>
           )}
-          {showWhy && question.visual && <MinimalNumberLine />}
         </>
       )}
 
       <button
         onClick={onNext}
-        className="mt-3 px-5 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg
+        className="mt-2 px-5 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg
           hover:bg-gray-700 transition-colors cursor-pointer
           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
       >

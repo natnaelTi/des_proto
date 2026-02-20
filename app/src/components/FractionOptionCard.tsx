@@ -37,7 +37,8 @@ export function FractionOptionCard({
       onClick={onSelect}
       disabled={disabled}
       className={`
-        flex flex-col items-center justify-center rounded-xl border-2 px-8 py-6
+        flex flex-col items-center justify-center rounded-xl border-2
+        px-6 py-5 sm:px-8 sm:py-6 min-w-[100px] sm:min-w-[120px]
         transition-all duration-150 cursor-pointer
         focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
         disabled:cursor-default
@@ -48,11 +49,11 @@ export function FractionOptionCard({
         {label}
       </span>
       <div className="flex flex-col items-center leading-none">
-        <span className="text-3xl font-semibold text-gray-800">
+        <span className="text-2xl sm:text-3xl font-semibold text-gray-800">
           {fraction.n}
         </span>
-        <div className="w-8 h-px bg-gray-800 my-1" />
-        <span className="text-3xl font-semibold text-gray-800">
+        <div className="w-6 sm:w-8 h-px bg-gray-800 my-1" />
+        <span className="text-2xl sm:text-3xl font-semibold text-gray-800">
           {fraction.d}
         </span>
       </div>

@@ -33,34 +33,23 @@ export function WorkoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-[100dvh] bg-gray-50 flex flex-col">
       {/* Top bar */}
-      <div className="px-4 py-4 max-w-lg mx-auto w-full">
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <ProgressBar
-              currentIndex={progress.current}
-              totalQuestions={progress.total}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowStrategies(true)}
-            className="text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer whitespace-nowrap"
-          >
-            Strategies
-          </button>
-        </div>
+      <div className="px-4 sm:px-6 py-4 max-w-lg mx-auto w-full">
+        <ProgressBar
+          currentIndex={progress.current}
+          totalQuestions={progress.total}
+        />
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex items-start justify-center px-4 pt-8">
+      <div className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-6 sm:pt-8 pb-6">
         <div className="max-w-lg w-full">
-          <p className="text-center text-gray-600 text-lg mb-8">
+          <p className="text-center text-gray-600 text-base sm:text-lg mb-6 sm:mb-8">
             Which is larger?
           </p>
 
-          <div className="flex justify-center gap-6">
+          <div className="flex justify-center gap-4 sm:gap-6">
             <FractionOptionCard
               label="A"
               fraction={question.a}
@@ -81,7 +70,7 @@ export function WorkoutPage() {
 
           {/* Check button */}
           {!showingFeedback && (
-            <div className="mt-8 text-center">
+            <div className="mt-6 sm:mt-8 text-center">
               <button
                 onClick={() => dispatch({ type: 'SUBMIT_ANSWER' })}
                 disabled={!canSubmit}
@@ -105,6 +94,18 @@ export function WorkoutPage() {
             />
           )}
         </div>
+      </div>
+
+      {/* Strategies link — bottom of page, clearly separated */}
+      <div className="px-4 sm:px-6 pb-4 max-w-lg mx-auto w-full text-center">
+        <button
+          type="button"
+          onClick={() => setShowStrategies(true)}
+          className="text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer
+            underline underline-offset-2"
+        >
+          View Strategies
+        </button>
       </div>
 
       {/* On-demand strategy reference */}

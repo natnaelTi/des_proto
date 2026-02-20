@@ -12,7 +12,7 @@ export function StrategyReferencePanel({
 }: StrategyReferencePanelProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/20 z-50">
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 max-w-sm w-full mx-4 max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 sm:p-6 max-w-sm w-full mx-4 max-h-[80dvh] overflow-y-auto">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">
           Strategies
         </h3>

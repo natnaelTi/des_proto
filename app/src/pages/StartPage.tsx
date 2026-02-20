@@ -11,12 +11,12 @@ export function StartPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="text-center max-w-md">
-        <h1 className="text-3xl font-semibold text-gray-800 mb-3">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gray-50 px-4 sm:px-6">
+      <div className="text-center max-w-md w-full">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-3">
           Fraction Comparison Workout
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-sm sm:text-base text-gray-500 mb-8">
           A short workout to sharpen your fraction comparison skills.
         </p>
         <button
@@ -25,7 +25,7 @@ export function StartPage() {
             hover:bg-gray-700 transition-colors cursor-pointer
             focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
         >
-          Start
+          Start Workout
         </button>
       </div>
     </div>
