@@ -77,6 +77,19 @@ export interface SkillGrowthItem {
   phrase: string;
 }
 
+export interface StrategyTip {
+  category: Category;
+  displayName: string;
+  strategyLine: string;
+}
+
+export interface CheckpointData {
+  mode: 'growth' | 'strategy';
+  growthItems: SkillGrowthItem[];
+  strategyTips: StrategyTip[];
+  isEndOfSession: boolean;
+}
+
 export const CATEGORY_DISPLAY_NAMES: Record<Category, string> = {
   same_denominator: 'same-denominator comparisons',
   same_numerator: 'same-numerator comparisons',

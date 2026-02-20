@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSession, selectCurrentQuestion, selectProgress, selectSkillGrowthSummary, selectCanSubmit } from '../state/store';
+import { useSession, selectCurrentQuestion, selectProgress, selectCheckpointData, selectCanSubmit } from '../state/store';
 import { ProgressBar } from '../components/ProgressBar';
 import { FractionOptionCard } from '../components/FractionOptionCard';
 import { FeedbackCard } from '../components/FeedbackCard';
@@ -94,11 +94,15 @@ export function WorkoutPage() {
         </div>
       </div>
 
-      {/* Skill Growth overlay */}
+      {/* Skill Growth / Strategy Review overlay */}
       {state.ui.showingSkillGrowth && (
         <SkillGrowthPanel
-          items={selectSkillGrowthSummary(state)}
+          data={selectCheckpointData(state)}
           onDismiss={() => dispatch({ type: 'DISMISS_SKILL_GROWTH' })}
+          onRestart={() => {
+            dispatch({ type: 'RESTART' });
+            navigate('/');
+          }}
         />
       )}
     </div>

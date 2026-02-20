@@ -5,9 +5,10 @@ import type {
   Category,
   CategoryStats,
   SkillGrowthItem,
+  CheckpointData,
   Question,
 } from './types';
-import { ALL_CATEGORIES, CATEGORY_DISPLAY_NAMES } from './types';
+import { ALL_CATEGORIES, CATEGORY_DISPLAY_NAMES, STRATEGY_LINES } from './types';
 import { questionBank } from './questionBank';
 import { mulberry32, selectNextQuestion, shouldShowReinforcement } from './engine';
 
@@ -285,6 +286,39 @@ export function selectSkillGrowthSummary(
     items.push({ category: cat, displayName, phrase });
   }
   return items.slice(0, 3);
+}
+
+export function selectCheckpointData(state: SessionState): CheckpointData {
+  const totalCorrect = state.history.filter((h) => h.isCorrect).length;
+  const isEndOfSession =
+    state.history.length >= state.config.totalQuestions;
+
+  if (totalCorrect === 0) {
+    // Zero correct: show strategy review for categories with wrong answers
+    const seenCategories = new Set(state.history.map((h) => h.category));
+    const tips = ALL_CATEGORIES
+      .filter((cat) => seenCategories.has(cat))
+      .map((cat) => ({
+        category: cat,
+        displayName: CATEGORY_DISPLAY_NAMES[cat],
+        strategyLine: STRATEGY_LINES[cat],
+      }))
+      .slice(0, 3);
+
+    return {
+      mode: 'strategy',
+      growthItems: [],
+      strategyTips: tips,
+      isEndOfSession,
+    };
+  }
+
+  return {
+    mode: 'growth',
+    growthItems: selectSkillGrowthSummary(state),
+    strategyTips: [],
+    isEndOfSession,
+  };
 }
 
 export function selectCanSubmit(state: SessionState): boolean {
