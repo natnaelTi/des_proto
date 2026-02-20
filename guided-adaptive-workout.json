@@ -1,0 +1,266 @@
+{
+  "project": {
+    "name": "guided-adaptive-workout-prototype",
+    "description": "React prototype for high-school fraction comparison practice with stealth adaptive engine and subtle skill growth visibility.",
+    "stack": {
+      "framework": "react",
+      "language": "typescript",
+      "routing": "react-router",
+      "styling": "tailwind",
+      "state": "headless_store"
+    }
+  },
+  "ux_direction": {
+    "name": "Guided Adaptive Workout",
+    "principles": [
+      "Feels like a mature skill workout (not remedial).",
+      "Adaptation is mostly invisible; never announce remediation.",
+      "Help is calm, neutral, non-assumptive; focuses on correct reasoning.",
+      "Progress is shown subtly as 'Skill Growth' at checkpoints without deficit labels.",
+      "Simplicity and completion are preserved."
+    ],
+    "anti_patterns": [
+      "No visible levels or labels like 'weak/low/basic'.",
+      "No cartoon visuals or childish gamification.",
+      "No red/yellow warning states for skill.",
+      "No assuming why the student chose an answer."
+    ]
+  },
+  "routes": [
+    {
+      "path": "/",
+      "page": "StartPage",
+      "purpose": "Entry point to start a session."
+    },
+    {
+      "path": "/workout",
+      "page": "WorkoutPage",
+      "purpose": "Main one-question-at-a-time workout flow with feedback and checkpoint skill growth."
+    },
+    {
+      "path": "/summary",
+      "page": "SummaryPage",
+      "purpose": "End of session summary + skill growth recap + restart."
+    }
+  ],
+  "session": {
+    "default_total_questions": 6,
+    "checkpoint_indices": [3, 6],
+    "seed": 1337,
+    "categories": [
+      "same_denominator",
+      "same_numerator",
+      "benchmark_half",
+      "unlike_denominator"
+    ],
+    "category_display_names": {
+      "same_denominator": "same-denominator comparisons",
+      "same_numerator": "same-numerator comparisons",
+      "benchmark_half": "benchmark comparisons",
+      "unlike_denominator": "unlike-denominator comparisons"
+    }
+  },
+  "copy": {
+    "start": {
+      "title": "Fraction Comparison Workout",
+      "subtitle": "A short workout to sharpen your fraction comparison skills.",
+      "cta": "Start"
+    },
+    "buttons": {
+      "check": "Check",
+      "next": "Next",
+      "continue": "Continue",
+      "restart": "Restart"
+    },
+    "feedback": {
+      "correct_title": "Correct.",
+      "incorrect_title": "Not quite.",
+      "see_why": "See why"
+    },
+    "strategy_lines": {
+      "same_denominator": "Same denominators: compare the numerators.",
+      "same_numerator": "Same numerator: the smaller denominator is larger pieces.",
+      "benchmark_half": "Use 1/2 as a benchmark. Is each fraction above or below 1/2?",
+      "unlike_denominator": "When denominators differ, compare using a common denominator or a benchmark like 1/2."
+    },
+    "skill_growth": {
+      "title": "Skill Growth",
+      "phrases": {
+        "strong": "Strong consistency in {category}.",
+        "improving": "Improving accuracy in {category}.",
+        "steady": "Making steady progress in {category}."
+      },
+      "rules": [
+        "No deficit language (e.g., weak/low/poor).",
+        "No red/yellow warning indicators.",
+        "Prefer phrases over percentages; if needed, show neutral counts like '4/6 correct so far'."
+      ]
+    }
+  },
+  "ui": {
+    "tone": "calm_neutral_mature",
+    "layout": {
+      "top_bar": ["progress_bar", "question_counter"],
+      "main_card": ["prompt", "option_A", "option_B", "primary_cta"],
+      "feedback_card": ["result", "correct_answer", "strategy_line", "optional_visual", "next_button"],
+      "checkpoint_panel": ["skill_growth_summary", "continue_button"]
+    },
+    "components": [
+      {
+        "name": "ProgressBar",
+        "props": ["currentIndex", "totalQuestions"]
+      },
+      {
+        "name": "FractionOptionCard",
+        "props": ["label", "fraction", "selected", "onSelect"]
+      },
+      {
+        "name": "FeedbackCard",
+        "props": [
+          "isCorrect",
+          "correctChoice",
+          "category",
+          "strategyLine",
+          "showVisual",
+          "onNext"
+        ]
+      },
+      {
+        "name": "SkillGrowthPanel",
+        "props": ["items", "onDismiss"]
+      },
+      {
+        "name": "MinimalNumberLine",
+        "props": ["marks", "highlight"]
+      }
+    ]
+  },
+  "state": {
+    "architecture": "headless",
+    "location": "src/state",
+    "store_shape": {
+      "config": {
+        "totalQuestions": 6,
+        "checkpointIndices": [3, 6],
+        "seed": 1337
+      },
+      "queue": {
+        "questionIds": [],
+        "currentIndex": 0
+      },
+      "current": {
+        "questionId": null,
+        "selectedChoice": null
+      },
+      "ui": {
+        "showingFeedback": false,
+        "showingSkillGrowth": false,
+        "reinforcementShown": false,
+        "lastFeedbackType": null
+      },
+      "history": [
+        {
+          "questionId": "string",
+          "category": "string",
+          "difficulty": 1,
+          "selectedChoice": "A",
+          "isCorrect": true,
+          "timestamp": 0
+        }
+      ],
+      "stats": {
+        "byCategory": {
+          "same_denominator": { "attempts": 0, "correct": 0, "recentWrongCount": 0 },
+          "same_numerator": { "attempts": 0, "correct": 0, "recentWrongCount": 0 },
+          "benchmark_half": { "attempts": 0, "correct": 0, "recentWrongCount": 0 },
+          "unlike_denominator": { "attempts": 0, "correct": 0, "recentWrongCount": 0 }
+        }
+      }
+    },
+    "actions": [
+      "startSession",
+      "selectChoice",
+      "submitAnswer",
+      "continueAfterFeedback",
+      "dismissSkillGrowth",
+      "restart"
+    ],
+    "selectors": [
+      "selectCurrentQuestion",
+      "selectProgress",
+      "selectSkillGrowthSummary",
+      "selectCanSubmit",
+      "selectIsCheckpoint"
+    ]
+  },
+  "adaptive_engine": {
+    "location": "src/state/engine.ts",
+    "requirements": [
+      "Maintain per-category weights based on accuracy.",
+      "Choose next category via weighted random (deterministic if seed provided).",
+      "Choose difficulty 1-3 based on category accuracy and recent wrongs.",
+      "If recentWrongCount >= 2 in a category, next pick in that category should reduce difficulty by 1 (min 1) and then reset recentWrongCount on correct.",
+      "Avoid repeating the same questionId within a session."
+    ],
+    "determinism": {
+      "seeded_random": true,
+      "method": "mulberry32_or_equivalent"
+    }
+  },
+  "question_bank": {
+    "location": "src/state/questionBank.ts",
+    "min_questions_total": 32,
+    "min_per_category": 8,
+    "schema": {
+      "id": "string",
+      "a": { "n": 1, "d": 2 },
+      "b": { "n": 1, "d": 3 },
+      "correctChoice": "A",
+      "category": "same_denominator",
+      "difficulty": 1,
+      "visual": {
+        "type": "number_line",
+        "marks": [0, 0.5, 1],
+        "highlight": 0.5
+      }
+    },
+    "examples_required": [
+      { "category": "same_denominator", "example": "3/7 vs 5/7" },
+      { "category": "same_numerator", "example": "3/5 vs 3/8" },
+      { "category": "benchmark_half", "example": "4/9 vs 5/8" },
+      { "category": "unlike_denominator", "example": "2/3 vs 3/5" }
+    ]
+  },
+  "behavior_rules": {
+    "reinforcement_probability_on_correct": 0.3,
+    "checkpoint_behavior": {
+      "show_skill_growth_after_questions": [3, 6],
+      "dismissible": true,
+      "max_bullets": 3
+    },
+    "incorrect_feedback": {
+      "non_assumptive": true,
+      "structure": ["result", "strategy", "optional_visual"]
+    }
+  },
+  "deliverables": {
+    "file_structure": [
+      "src/pages/StartPage.tsx",
+      "src/pages/WorkoutPage.tsx",
+      "src/pages/SummaryPage.tsx",
+      "src/components/ProgressBar.tsx",
+      "src/components/FractionOptionCard.tsx",
+      "src/components/FeedbackCard.tsx",
+      "src/components/SkillGrowthPanel.tsx",
+      "src/components/MinimalNumberLine.tsx",
+      "src/state/store.ts",
+      "src/state/engine.ts",
+      "src/state/questionBank.ts",
+      "src/state/types.ts"
+    ],
+    "run_instructions": [
+      "npm install",
+      "npm run dev"
+    ]
+  }
+}
