@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSession, selectCurrentQuestion, selectProgress, selectCheckpointData, selectCanSubmit } from '../state/store';
+import { useSession, selectCurrentQuestion, selectProgress, selectCheckpointData, selectSkillGrowthSummary, selectCanSubmit } from '../state/store';
 import { ProgressBar } from '../components/ProgressBar';
 import { FractionOptionCard } from '../components/FractionOptionCard';
 import { FeedbackCard } from '../components/FeedbackCard';
 import { SkillGrowthPanel } from '../components/SkillGrowthPanel';
+import { StrategyReferencePanel } from '../components/StrategyReferencePanel';
 
 export function WorkoutPage() {
   const { state, dispatch } = useSession();
@@ -12,6 +13,7 @@ export function WorkoutPage() {
   const question = selectCurrentQuestion(state);
   const progress = selectProgress(state);
   const canSubmit = selectCanSubmit(state);
+  const [showStrategies, setShowStrategies] = useState(false);
 
   useEffect(() => {
     if (state.phase === 'start') navigate('/', { replace: true });
@@ -34,10 +36,21 @@ export function WorkoutPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top bar */}
       <div className="px-4 py-4 max-w-lg mx-auto w-full">
-        <ProgressBar
-          currentIndex={progress.current}
-          totalQuestions={progress.total}
-        />
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <ProgressBar
+              currentIndex={progress.current}
+              totalQuestions={progress.total}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowStrategies(true)}
+            className="text-xs text-gray-400 hover:text-gray-600 transition-colors cursor-pointer whitespace-nowrap"
+          >
+            Strategies
+          </button>
+        </div>
       </div>
 
       {/* Main content */}
@@ -93,6 +106,14 @@ export function WorkoutPage() {
           )}
         </div>
       </div>
+
+      {/* On-demand strategy reference */}
+      {showStrategies && (
+        <StrategyReferencePanel
+          growthItems={selectSkillGrowthSummary(state)}
+          onClose={() => setShowStrategies(false)}
+        />
+      )}
 
       {/* Skill Growth / Strategy Review overlay */}
       {state.ui.showingSkillGrowth && (
