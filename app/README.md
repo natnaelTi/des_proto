@@ -25,9 +25,26 @@ The app runs at `http://localhost:5173`.
 
 ```bash
 npm run build      # Production build
-npm run preview    # Preview production build locally
 npm run lint       # Run ESLint
+npm run test       # Run the unit test suite once
+npm run test:watch # Run tests in watch mode
+npm run check      # Run lint, tests, and the production build
+npm run preview    # Preview production build locally
 ```
+
+## Quality Gates
+
+Every push to `master` and every pull request runs the same three checks used
+locally by `npm run check`:
+
+1. ESLint static analysis
+2. Vitest unit tests for the adaptive engine, session reducer, selectors, and
+   question-bank integrity
+3. TypeScript compilation and a production Vite build
+
+The workflow lives in `.github/workflows/ci.yml`. The reasoning behind the
+state boundary and deterministic selection strategy is recorded in
+[`docs/adr/0001-headless-adaptive-engine.md`](../docs/adr/0001-headless-adaptive-engine.md).
 
 ## How It Works
 
